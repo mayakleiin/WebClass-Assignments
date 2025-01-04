@@ -1,0 +1,28 @@
+{
+  "name": "webclass-project1",
+  "version": "1.0.0",
+  "description": "Web Class - Project 1",
+  "homepage": "https://github.com/mayakleiin/WebClass-Project1#readme",
+  "bugs": {
+    "url": "https://github.com/mayakleiin/WebClass-Project1/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mayakleiin/WebClass-Project1.git"
+  },
+  "license": "ISC",
+  "author": "Maya Klein, Noa Aharon",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
