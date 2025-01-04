@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
-require("dotenv").config(); // לטעינת משתני סביבה מתוך .env
+require("dotenv").config();
 const mongoose = require("mongoose");
 
-// חיבור ל-MongoDB
+// MongoDB connection
 mongoose.connect(process.env.DB_CONNECT, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -13,24 +13,24 @@ db.on("error", (error) => console.error("Connection error:", error));
 db.once("open", () => console.log("Connected to database"));
 
 // Middleware
-app.use(express.json()); // כדי לעבוד עם JSON בצורה מובנית
+app.use(express.json());
 
-// חיבור נתיבים (Routes)
+// Route imports
 const postsRoute = require("./routes/posts_route");
 const commentsRoute = require("./routes/comments_route");
 
-// נתיבים של פוסטים
+// Posts routes
 app.use("/posts", postsRoute);
 
-// נתיבים של תגובות
+// Comments routes
 app.use("/comments", commentsRoute);
 
-// ברירת מחדל לנתיב השורש
+// Default root route
 app.get("/", (req, res) => {
   res.send("Welcome to the API!");
 });
 
-// הפעלת השרת
+// Server start
 const PORT = process.env.PORT || 3000; // ברירת מחדל ל-3000
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

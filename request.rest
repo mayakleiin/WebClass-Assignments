@@ -1,4 +1,4 @@
-### יצירת תגובה חדשה
+### Create a new comment
 POST http://localhost:3000/comment
 Content-Type: application/json
 
@@ -8,23 +8,14 @@ Content-Type: application/json
   "sender": "12345"
 }
 
-POST http://localhost:3000/comments/create
-Content-Type: application/json
 
-{
-  "post": "63af44b0c9d1a45fdb741e2d",
-  "content": "This is a comment!",
-  "sender": "12345"
-}
-
-
-### שליפת כל התגובות
+### Get all comments
 GET http://localhost:3000/comments
 
-### שליפת תגובות לפי פוסט
+### Get comments by post
 GET http://localhost:3000/comment?post=63af44b0c9d1a45fdb741e2d
 
-### עדכון תגובה
+### Get comments by sender
 PUT http://localhost:3000/comment/63af44b0c9d1a45fdb741e2d
 Content-Type: application/json
 
@@ -32,5 +23,5 @@ Content-Type: application/json
   "content": "Updated comment text!"
 }
 
-### מחיקת תגובה
-DELETE http://localhost:3000/comment/63af44b0c9d1a45fdb741e2d
+### Delete a comment
+DELETE http://localhost:3000/comment/67796567431092dc80bc2787
