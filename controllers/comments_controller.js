@@ -1,6 +1,6 @@
 const Comment = require("../models/comments_model");
 
-// יצירת תגובה חדשה
+// Create a new comment
 exports.createComment = async (req, res) => {
   try {
     const newComment = new Comment(req.body);
@@ -11,7 +11,7 @@ exports.createComment = async (req, res) => {
   }
 };
 
-// שליפת כל התגובות
+// Get all comments
 exports.getAllComments = async (req, res) => {
   try {
     const comments = await Comment.find();
@@ -21,7 +21,7 @@ exports.getAllComments = async (req, res) => {
   }
 };
 
-// שליפת תגובות לפי פוסט
+// Get comments by post ID
 exports.getCommentsByPost = async (req, res) => {
   try {
     const comments = await Comment.find({ post: req.query.post });
@@ -31,7 +31,7 @@ exports.getCommentsByPost = async (req, res) => {
   }
 };
 
-// עדכון תגובה
+// Update a comment
 exports.updateComment = async (req, res) => {
   try {
     const updatedComment = await Comment.findByIdAndUpdate(
@@ -47,7 +47,7 @@ exports.updateComment = async (req, res) => {
   }
 };
 
-// מחיקת תגובה
+// Delete a comment
 exports.deleteComment = async (req, res) => {
   try {
     const deletedComment = await Comment.findByIdAndDelete(
