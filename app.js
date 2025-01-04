@@ -1,28 +1,28 @@
 const express = require("express");
 const app = express();
-const dotenv = require("dotenv").config();
-const port = process.env.PORT;
-
+require("dotenv").config(); // לטעינת משתני סביבה מתוך .env
 const mongoose = require("mongoose");
-mongoose.connect(process.env.DB_CONNECT);
+
+// חיבור ל-MongoDB
+mongoose.connect(process.env.DB_CONNECT, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 const db = mongoose.connection;
-db.on("error", (error) => console.error(error));
+db.on("error", (error) => console.error("Connection error:", error));
 db.once("open", () => console.log("Connected to database"));
 
-const bodyParser = require("body-parser");
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// Middleware
+app.use(express.json()); // כדי לאפשר עבודה עם JSON
 
-const postsRoute = require("./routes/posts_route");
-app.use("/posts", postsRoute);
+// ייבוא הנתיבים (Routes)
+const commentsRoute = require("./routes/comments_route");
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+// חיבור הנתיבים ל-App
+app.use("/", commentsRoute); // כל הנתיבים של תגובות יחוברו כאן
 
-
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
-});
-
-module.exports = app;
+// הפעלת השרת
+const PORT = process.env.PORT || 3000; // ברירת מחדל ל-3000
+app.listen(PORT, () =>
+  console.log(`Server running on http://localhost:${PORT}`)
+);
