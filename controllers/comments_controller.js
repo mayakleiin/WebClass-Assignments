@@ -7,7 +7,7 @@ const createComment = async (req, res) => {
     const savedComment = await newComment.save();
     res.status(201).json(savedComment);
   } catch (err) {
-    res.status(500).json({ error: "Error creating comment" });
+    res.status(500).json({ error: `Error creating comment: ${err.message}` });
   }
 };
 
@@ -17,17 +17,20 @@ const getAllComments = async (req, res) => {
     const comments = await Comment.find();
     res.status(200).json(comments);
   } catch (err) {
-    res.status(500).json({ error: "Error fetching comments" });
+    res.status(500).json({ error: `Error fetching comments: ${err.message}` });
   }
 };
 
 // Get comments by post ID
 const getCommentsByPost = async (req, res) => {
   try {
+    if (!req.query.post) {
+      return res.status(400).json({ error: "Post ID is required" });
+    }
     const comments = await Comment.find({ post: req.query.post });
     res.status(200).json(comments);
   } catch (err) {
-    res.status(500).json({ error: "Error fetching comments" });
+    res.status(500).json({ error: `Error fetching comments: ${err.message}` });
   }
 };
 
@@ -39,11 +42,12 @@ const updateComment = async (req, res) => {
       req.body,
       { new: true }
     );
-    if (!updatedComment)
+    if (!updatedComment) {
       return res.status(404).json({ error: "Comment not found" });
+    }
     res.status(200).json(updatedComment);
   } catch (err) {
-    res.status(500).json({ error: "Error updating comment" });
+    res.status(500).json({ error: `Error updating comment: ${err.message}` });
   }
 };
 
@@ -53,18 +57,19 @@ const deleteComment = async (req, res) => {
     const deletedComment = await Comment.findByIdAndDelete(
       req.params.comment_id
     );
-    if (!deletedComment)
+    if (!deletedComment) {
       return res.status(404).json({ error: "Comment not found" });
+    }
     res.status(200).json({ message: "Comment deleted" });
   } catch (err) {
-    res.status(500).json({ error: "Error deleting comment" });
+    res.status(500).json({ error: `Error deleting comment: ${err.message}` });
   }
 };
 
 module.exports = {
-    createComment,
-    getAllComments,
-    getCommentsByPost,
-    updateComment,
-    deleteComment
+  createComment,
+  getAllComments,
+  getCommentsByPost,
+  updateComment,
+  deleteComment,
 };

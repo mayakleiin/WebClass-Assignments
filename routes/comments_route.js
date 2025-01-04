@@ -4,8 +4,8 @@ const commentController = require("../controllers/comments_controller");
 
 // Routes
 router.post("/comment", commentController.createComment); // Create a new comment
-router.get("/comments", commentController.getAllComments); // Get all comments
-router.get("/comment", commentController.getCommentsByPost); // Get comments by post ID
+router.get("/", commentController.getCommentsByPost); // Get comments by post ID
+router.get("/all", commentController.getAllComments); // Get all comments
 router.put("/comment/:comment_id", commentController.updateComment); // Update a comment
 router.delete("/comment/:comment_id", commentController.deleteComment); // Delete a comment
 
