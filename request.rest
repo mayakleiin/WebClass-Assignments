@@ -1,6 +1,6 @@
 @baseUrl = http://localhost:3000
-@postId = 6790f406c80f3fed27504c7a
-@commentId = 6790f445c80f3fed27504c82
+@postId = 6790f410c80f3fed27504c7c
+@commentId = 6790f455c80f3fed27504c84
 
 ############ COMMENTS Requests: ############
 
