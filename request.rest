@@ -1,6 +1,6 @@
 @baseUrl = http://localhost:3000
-@postId = 677985c87ec88218105db60e
-@commentId = 67796568431092dc80bc2789
+@postId = 6790f406c80f3fed27504c7a
+@commentId = 6790f445c80f3fed27504c82
 
 ############ COMMENTS Requests: ############
 
@@ -42,6 +42,7 @@ Content-Type: application/json
   "owner": "LadyGaga",
   "content": "Caught in a bad romance"
 }
+
 
 ### Get All Posts (All posts)
 GET {{baseUrl}}/posts
