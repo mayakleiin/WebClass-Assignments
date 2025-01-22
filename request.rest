@@ -1,8 +1,6 @@
 @baseUrl = http://localhost:3000
-@postId = 677985c87ec88218105db60e
-@postId2 = 123456a82ab89657182db90c
-@commentId = 67796568431092dc80bc2789
-@commentId2 = 19865785548956ab89cd1234
+@postId = 6790f406c80f3fed27504c7a
+@commentId = 6790f445c80f3fed27504c82
 
 ############ COMMENTS Requests: ############
 
@@ -12,16 +10,6 @@ Content-Type: application/json
 
 {
   "post": "{{postId}}",
-  "content": "This is a comment",
-  "sender": "beyonce"
-}
-
-### Add a new comment 2
-POST {{baseUrl}}/comments/comment
-Content-Type: application/json
-
-{
-  "post": "{{postId2}}",
   "content": "This is a comment",
   "sender": "beyonce"
 }
@@ -55,15 +43,6 @@ Content-Type: application/json
   "content": "Caught in a bad romance"
 }
 
-### Add a New Post 2
-POST {{baseUrl}}/posts
-Content-Type: application/json
-
-{
-  "title": "Bad Romance",
-  "owner": "LadyGaga",
-  "content": "Caught in a bad romance"
-}
 
 ### Get All Posts (All posts)
 GET {{baseUrl}}/posts
