@@ -137,9 +137,9 @@ const logout = async (req: Request, res: Response) => {
         );
         await user.save();
         res.status(200).send("Logged out");
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
-        res.status(400).send("invalid refresh token");
+        res.status(400).send(err);
+        return;
       }
     }
   );
@@ -203,9 +203,9 @@ const refresh = async (req: Request, res: Response) => {
           token: newTokens.token,
           refreshToken: newTokens.refreshToken,
         });
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
-        res.status(400).send("Invalid refresh token");
+        res.status(400).send(err);
+        return;
       }
     }
   );

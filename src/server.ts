@@ -1,16 +1,19 @@
 import express, { Express } from "express";
-const app = express();
 import dotenv from "dotenv";
-dotenv.config();
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import postRoutes from "./routes/posts_route";
 import commentsRoutes from "./routes/comments_route";
+import authRoutes from "./routes/auth_route";
+
+dotenv.config();
+const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/posts", postRoutes);
 app.use("/comments", commentsRoutes);
+app.use("/auth", authRoutes);
 
 const initApp = async () => {
   return new Promise<Express>((resolve, reject) => {
