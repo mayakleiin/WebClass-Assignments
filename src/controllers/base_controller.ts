@@ -10,17 +10,15 @@ export class BaseController<T> {
 
   // Create a new item
   async create(req: Request, res: Response) {
-    const userId = req.query.userId as string;
+    const _id = req.query.userId;
     try {
       const data = await this.model.create({
         ...req.body,
-        owner: userId,
+        owner: _id,
       });
       res.status(201).send(data);
     } catch (error) {
-      res
-        .status(400)
-        .send({ error: "Failed to create item", details: error.message });
+      res.status(400).send(error);
     }
   }
 
