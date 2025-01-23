@@ -1,14 +1,14 @@
 {
-  "name": "webclass-project1",
+  "name": "webclass-assignments",
   "version": "1.0.0",
   "description": "Web Class Assignments",
-  "homepage": "https://github.com/mayakleiin/WebClass-Project1#readme",
+  "homepage": "https://github.com/mayakleiin/WebClass-Assignments#readme",
   "bugs": {
-    "url": "https://github.com/mayakleiin/WebClass-Project1/issues"
+    "url": "https://github.com/mayakleiin/WebClass-Assignments/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mayakleiin/WebClass-Project1.git"
+    "url": "git+https://github.com/mayakleiin/WebClass-Assignments.git"
   },
   "license": "ISC",
   "author": "Maya Klein, Noa Aharon",
