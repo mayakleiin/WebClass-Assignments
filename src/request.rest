@@ -1,11 +1,11 @@
 @baseUrl = http://localhost:3000
-@postId = 6790f410c80f3fed27504c7c
+@postId = 6790f6d0a5412283e50aee19
 @commentId = 6790f455c80f3fed27504c84
 
 ############ COMMENTS Requests: ############
 
 ### Add a new comment
-POST {{baseUrl}}/comments/comment
+POST {{baseUrl}}/comments
 Content-Type: application/json
 
 {
@@ -14,14 +14,14 @@ Content-Type: application/json
   "sender": "beyonce"
 }
 
-### Get comments by post ID
-GET {{baseUrl}}/comments?post={{postId}}
+### Get a comment by ID
+GET {{baseUrl}}/comments/{{commentId}}
 
 ### Get all comments
 GET {{baseUrl}}/comments/all
 
 ### Update a comment
-PUT {{baseUrl}}/comments/comment/{{commentId}}
+PUT {{baseUrl}}/comments/{{commentId}}
 Content-Type: application/json
 
 {
@@ -29,7 +29,7 @@ Content-Type: application/json
 }
 
 ### Delete a comment
-DELETE {{baseUrl}}/comments/comment/{{commentId}}
+DELETE {{baseUrl}}/comments/{{commentId}}
 
 ############ POSTS Requests: ############
 
