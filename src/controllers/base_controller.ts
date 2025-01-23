@@ -31,7 +31,7 @@ export class BaseController<T> {
       const query = ownerFilter ? { owner: ownerFilter } : {};
       const items = await this.model.find(query);
       res.status(200).send(items);
-    } catch (error: any) {
+    } catch (error) {
       res
         .status(400)
         .send({ error: "Failed to fetch items", details: error.message });
