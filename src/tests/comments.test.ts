@@ -1,94 +1,142 @@
 import request from "supertest";
 import initApp from "../server";
 import mongoose from "mongoose";
-import commentsModel from "../models/comments_model";
-import userModel, { IUser } from "../models/user_model";
+import commentModel from "../models/comments_model";
 import { Express } from "express";
+import userModel from "../models/user_model";
 
 let app: Express;
-let commentId = "";
-type User = IUser & { token?: string };
-const testUser: User = {
+
+const testUser = {
   email: "test@user.com",
-  password: "testpassword",
+  password: "123456",
+  token: "",
+  id: "",
+};
+
+let postId = "";
+
+const testComment = {
+  comment: "My comment",
+  postId: "This is my comment",
+  owner: "test user",
 };
 
 beforeAll(async () => {
-  console.log("Setting up test environment...");
   app = await initApp();
-
-  await commentsModel.deleteMany();
+  console.log("beforeAll");
+  await commentModel.deleteMany();
   await userModel.deleteMany();
-
-  await request(app).post("/auth/register").send(testUser);
-
-  const loginResponse = await request(app).post("/auth/login").send(testUser);
-  testUser.token = loginResponse.body.token;
-  testUser._id = loginResponse.body._id;
-  expect(testUser.token).toBeDefined();
+  const response = await request(app).post("/auth/register").send(testUser);
+  expect(response.statusCode).toBe(200);
+  const response2 = await request(app).post("/auth/login").send(testUser);
+  expect(response2.statusCode).toBe(200);
+  testUser.token = response2.body.token;
+  testComment.owner = response2.body._id;
 });
 
 afterAll(async () => {
-  console.log("Cleaning up...");
+  console.log("afterAll");
   await mongoose.connection.close();
 });
 
-describe("Comments API Tests", () => {
-  it("should create a new comment", async () => {
-    const response = await request(app)
-      .post("/comments")
-      .set("authorization", `JWT ${testUser.token}`)
-      .send({
-        comment: "This is a test comment",
-        postId: "123",
-        owner: testUser._id,
-      });
+const invalidComment = {
+  comment: "First Test",
+};
 
-    expect(response.statusCode).toBe(201);
-    expect(response.body.comment).toBe("This is a test comment");
-    commentId = response.body._id;
-  });
-
-  it("should get all comments", async () => {
+describe("Comments test suite", () => {
+  test("Comment test get all Comments", async () => {
     const response = await request(app).get("/comments");
     expect(response.statusCode).toBe(200);
-    expect(Array.isArray(response.body)).toBe(true);
+    expect(response.body.length).toBe(0);
+  });
+
+  test("Test adding new comments", async () => {
+    const response = await request(app)
+      .post("/comments")
+      .set({
+        authorization: "JWT " + testUser.token,
+      })
+      .send(testComment);
+    expect(response.statusCode).toBe(201);
+    expect(response.body.owner).toBe(testComment.owner);
+    expect(response.body.comment).toBe(testComment.comment);
+    postId = response.body._id;
+  });
+
+  test("Test adding invalid comments", async () => {
+    const response = await request(app)
+      .post("/comments")
+      .set({
+        authorization: "JWT " + testUser.token,
+      })
+      .send(invalidComment);
+    expect(response.statusCode).toBe(400);
+  });
+
+  test("Test get all comments after adding", async () => {
+    const response = await request(app).get("/comments");
+    expect(response.statusCode).toBe(200);
     expect(response.body.length).toBe(1);
   });
 
-  it("should get a comment by ID", async () => {
-    const response = await request(app).get(`/comments/${commentId}`);
+  test("Test get comments by owner", async () => {
+    const response = await request(app).get(
+      "/comments?owner=" + testComment.owner
+    );
     expect(response.statusCode).toBe(200);
-    expect(response.body._id).toBe(commentId);
+    expect(response.body.length).toBe(1);
+    expect(response.body[0].owner).toBe(testComment.owner);
   });
 
-  it("should update a comment", async () => {
-    const response = await request(app)
-      .put(`/comments/${commentId}`)
-      .set("authorization", `JWT ${testUser.token}`)
-      .send({
-        comment: "This is an updated test comment",
-      });
-
+  test("Test get comments by id", async () => {
+    const response = await request(app).get("/comments/" + postId);
     expect(response.statusCode).toBe(200);
-    expect(response.body.comment).toBe("This is an updated test comment");
+    expect(response.body._id).toBe(postId);
   });
 
-  it("should delete a comment", async () => {
-    const deleteResponse = await request(app)
-      .delete(`/comments/${commentId}`)
-      .set("authorization", `JWT ${testUser.token}`);
-    expect(deleteResponse.statusCode).toBe(200);
-
-    const getResponse = await request(app).get(`/comments/${commentId}`);
-    expect(getResponse.statusCode).toBe(404);
-  });
-
-  it("should fail to create a comment with missing fields", async () => {
-    const response = await request(app)
-      .post("/comments")
-      .set("authorization", `JWT ${testUser.token}`)
-      .send({});
+  test("Test get comments by fail id-1", async () => {
+    const response = await request(app).get("/comments/" + postId + 5);
     expect(response.statusCode).toBe(400);
+  });
+
+  test("Test get comments by fail id-2", async () => {
+    const response = await request(app).get(
+      "/comments/6745df242f1b06026b3201f8"
+    );
+    expect(response.statusCode).toBe(404);
+  });
+
+  test("Update comments test by id", async () => {
+    const updateComments = {
+      comment: "Updated comment",
+    };
+
+    const response = await request(app)
+      .put("/comments/" + postId)
+      .set({
+        authorization: "JWT " + testUser.token,
+      })
+      .send(updateComments);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.comment).toBe(updateComments.comment);
+  });
+
+  test("Comments Delete test", async () => {
+    const response = await request(app)
+      .delete("/comments/" + postId)
+      .set({
+        authorization: "JWT " + testUser.token,
+      });
+    expect(response.statusCode).toBe(200);
+
+    const response2 = await request(app).get("/comments/" + postId);
+    expect(response2.statusCode).toBe(404);
+
+    const response3 = await request(app).get("/comments/" + postId);
+    const post = response3.body;
+    console.log(post);
+    expect(response3.statusCode).toBe(404);
   });
 });
