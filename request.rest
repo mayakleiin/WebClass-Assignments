@@ -62,3 +62,6 @@ Content-Type: application/json
   "owner": "Rihanna",
   "content": "Shine bright like a diamond"
 }
+
+### Delete a Post
+DELETE {{baseUrl}}/posts/{{postId}}
